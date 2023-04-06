@@ -2,11 +2,25 @@ const Discord = require('discord.js');
 const dotenv = require('dotenv');
 const fs = require('fs');
 const path = require('path');
+// Importa el módulo http
+const http = require('http');
 
 const { Client, Collection, Events, GatewayIntentBits } = Discord;
 
-
 dotenv.config();
+
+// Crea un servidor HTTP básico
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Bot de Discord en funcionamiento\n');
+});
+
+// Escucha en el puerto 3000
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Servidor en funcionamiento en el puerto ${PORT}`);
+});
+
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
