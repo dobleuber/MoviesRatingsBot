@@ -1,0 +1,16 @@
+# Archivos de configuración de entorno
+.env
+
+# Archivos y directorios generados por Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos de registro y directorios
+logs
+*.log
+
+# Archivos generados por el sistema operativo
+.DS_Store
+Thumbs.db

@@ -1,0 +1,23 @@
+{
+    "name": "movie-ratings-bot",
+    "version": "0.1.0",
+    "description": "Fetches movie ratings from IMDB, TMDB and Rotten Tomatoes",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "movie-ratings",
+        "discord-bot",
+        "IMDB",
+        "TMDB",
+        "Rotten-Tomatoes"
+    ],
+    "author": "dobleuber",
+    "license": "MIT",
+    "dependencies": {
+        "discord.js": "^14.9.0",
+        "dotenv": "^16.0.3",
+        "node-fetch": "^3.3.1"
+    }
+}
