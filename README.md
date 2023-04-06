@@ -26,8 +26,10 @@ npm install
 ```bash
 DISCORD_TOKEN=your_discord_token
 TMDB_API_KEY=your_tmdb_api_key
+BOT_CLIENT_ID=your_bot_client_id
+GUILD_ID=your_guild_id
 ```
-  Replace your_discord_token with your Discord bot token and your_tmdb_api_key with your TMDB API key.
+Replace `your_discord_token` with your Discord bot token, `your_tmdb_api_key` with your TMDB API key, `your_bot_client_id` with your bot's client (application) ID, and `your_guild_id` with your Discord server's ID.
 
 4. Register the /movie command on your Discord server by replacing YOUR_CLIENT_ID and YOUR_GUILD_ID in the register-command.js file and then running:
 ```bash

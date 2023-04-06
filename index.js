@@ -1,44 +1,59 @@
-const { Client, Intents } = require('discord.js');
-const fetch = require('node-fetch');
+const Discord = require('discord.js');
 const dotenv = require('dotenv');
+const fs = require('fs');
+const path = require('path');
+
+const { Client, Collection, Events, GatewayIntentBits } = Discord;
+
 
 dotenv.config();
 
-const client = new Client({ intents: [Intents.FLAGS.Guilds, Intents.FLAGS.GuildMessages] });
+// Create a new client instance
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-});
+client.commands = new Collection();
 
-client.on('interactionCreate', async (interaction) => {
-  if (!interaction.isCommand()) return;
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
-  if (interaction.commandName === 'movie') {
-    const movieName = interaction.options.getString('name');
-    try {
-      const { title, rating } = await getTMDBRating(movieName);
-
-      const reply = `**${title}**
-TMDB: ${rating}%`;
-
-      await interaction.reply(reply);
-    } catch (error) {
-      console.error(error);
-      await interaction.reply({ content: 'Hubo un error al buscar la calificación de la película. Por favor, inténtalo de nuevo.', ephemeral: true });
-    }
-  }
-});
-
-async function getTMDBRating(movieName) {
-  const language = 'es';
-  const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&query=${encodeURIComponent(movieName)}&language=${language}`);
-  const data = await response.json();
-  if (data.results.length === 0) throw new Error('No se encontró la película');
-  const movieId = data.results[0].id;
-
-  const movieDetails = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.TMDB_API_KEY}&language=${language}`);
-  const detailsData = await movieDetails.json();
-  return { title: detailsData.title, rating: detailsData.vote_average * 10 };
+for (const file of commandFiles) {
+	const filePath = path.join(commandsPath, file);
+	const command = require(filePath);
+	// Set a new item in the Collection with the key as the command name and the value as the exported module
+	if ('data' in command && 'execute' in command) {
+		client.commands.set(command.data.name, command);
+	} else {
+		console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+	}
 }
 
+// When the client is ready, run this code (only once)
+// We use 'c' for the event parameter to keep it separate from the already defined 'client'
+client.once(Events.ClientReady, c => {
+	console.log(`Ready! Logged in as ${c.user.tag}`);
+});
+
+client.on(Events.InteractionCreate, async interaction => {
+  if (!interaction.isChatInputCommand()) return;
+	
+  const command = interaction.client.commands.get(interaction.commandName);
+
+	if (!command) {
+		console.error(`No command matching ${interaction.commandName} was found.`);
+		return;
+	}
+
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		if (interaction.replied || interaction.deferred) {
+			await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+		} else {
+			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+		}
+	}
+});
+
+// Log in to Discord with your client's token
 client.login(process.env.DISCORD_TOKEN);

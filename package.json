@@ -4,6 +4,7 @@
     "description": "Fetches movie ratings from IMDB, TMDB and Rotten Tomatoes",
     "main": "index.js",
     "scripts": {
+        "dev": "node index.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [
@@ -17,7 +18,6 @@
     "license": "MIT",
     "dependencies": {
         "discord.js": "^14.9.0",
-        "dotenv": "^16.0.3",
-        "node-fetch": "^3.3.1"
+        "dotenv": "^16.0.3"
     }
 }
