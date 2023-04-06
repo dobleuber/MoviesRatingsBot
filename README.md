@@ -24,7 +24,6 @@ npm install
 
 3. Create a .env file in the project root directory with the following contents:
 ```bash
-Copy code
 DISCORD_TOKEN=your_discord_token
 TMDB_API_KEY=your_tmdb_api_key
 ```
@@ -53,7 +52,6 @@ Example:
 The bot will reply with the rating:
 
 ```makefile
-Copy code
 **Matrix**
 TMDB: 87%
 ```
