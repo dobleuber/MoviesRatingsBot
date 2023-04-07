@@ -57,6 +57,11 @@ The bot will reply with the rating:
 **Matrix**
 TMDB: 87%
 ```
+
+## Deployment
+
+This bot is deployed on https://back4app.com/
+
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
