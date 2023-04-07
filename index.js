@@ -9,19 +9,6 @@ const { Client, Collection, Events, GatewayIntentBits } = Discord;
 
 dotenv.config();
 
-// Crea un servidor HTTP básico
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('Bot de Discord en funcionamiento\n');
-});
-
-// Escucha en el puerto 3000
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`Servidor en funcionamiento en el puerto ${PORT}`);
-});
-
-
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -71,3 +58,19 @@ client.on(Events.InteractionCreate, async interaction => {
 
 // Log in to Discord with your client's token
 client.login(process.env.DISCORD_TOKEN);
+
+const port = process.env.PORT || 3000;
+
+const server = http.createServer((req, res) => {
+	if (req.url === '/health') {
+	  res.writeHead(200, { 'Content-Type': 'application/json' });
+	  res.end(JSON.stringify({ status: 'ok' }));
+	} else {
+		res.writeHead(200, { 'Content-Type': 'text/plain' });
+		res.end('Bot de Discord en funcionamiento\n');
+	}
+  });
+  
+  server.listen(port, () => {
+	console.log(`Server running at http://localhost:${port}`);
+  });
